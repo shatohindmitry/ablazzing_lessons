@@ -23,10 +23,6 @@ import java.util.regex.Pattern;
 
 public class l2_hard {
 
-    private static String tagFirst = "<data>";
-    private static String tagLast = "</data>";
-    private static String regex = tagFirst+"(.+?)"+ tagLast;
-
     public static void main(String[] args) {
 
         //String incomingData = "<client>(Какие то данные)<data></data></client>";
@@ -39,6 +35,9 @@ public class l2_hard {
     }
 
     public static void parserPersonalData(String incomingData) {
+
+        String tagFirst = "<data>";
+        String tagLast = "</data>";
 
         String[] incomingDataArr = incomingData.split(tagFirst+"|"+ tagLast);
 
