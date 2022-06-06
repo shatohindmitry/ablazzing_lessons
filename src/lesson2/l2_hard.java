@@ -22,7 +22,10 @@ import java.util.regex.Pattern;
 //Регулярные выражения, класс StringBuilder
 
 public class l2_hard {
-    private static String regex = "<data>(.+?)</data>";
+
+    private static String tagFirst = "<data>";
+    private static String tagLast = "</data>";
+    private static String regex = tagFirst+"(.+?)"+ tagLast;
 
     public static void main(String[] args) {
 
@@ -36,16 +39,19 @@ public class l2_hard {
     }
 
     public static void parserPersonalData(String incomingData) {
-        String tagFirst = "<data>";
-        String taglast = "</data>";
 
-        String[] incomingDataArr = incomingData.split(tagFirst+"|"+taglast);
+        String[] incomingDataArr = incomingData.split(tagFirst+"|"+ tagLast);
 
+        //Проверка на корректность входящих данных
+        //Принимаем, как условие, что всегда есть блок <data></data>
         if (incomingDataArr.length != 3) {
             System.out.println("Не корректные входящие данные");
             System.exit(0);
         }
 
+        //Если блок <data> пустой возвращаем входящие данные без изменений
+        //Сплитим с условностью, что данные в блоке <data> всегда через ;
+        //Отправляем на определение типа и на маскарад
         if (!incomingDataArr[1].equals("")) {
             String[] personalDataArray = incomingDataArr[1].split(";");
             StringBuilder sb = new StringBuilder(incomingDataArr[0] + tagFirst);
@@ -57,13 +63,15 @@ public class l2_hard {
                     sb.append(";");
                 }
             }
-            sb.append(taglast + incomingDataArr[incomingDataArr.length - 1]);
+            sb.append(tagLast + incomingDataArr[incomingDataArr.length - 1]);
             System.out.println(sb);
         } else {
             System.out.println(incomingData);
         }
     }
 
+    //Определяем тип входящих данных (телефон, email, ИмяФамилия)
+    //По типу отправляем на маскарад
     public static String initializationOfPersonalDataType(String personalData) {
 
         Pattern pattern = Pattern.compile(".*@.*", Pattern.DOTALL);
@@ -71,6 +79,7 @@ public class l2_hard {
         if (matcher.find()) {
             return mascarading(personalData, TypeOfPersonalData.EMAIL);
         } else {
+            //Условность: Телефон всегда равен 11 знаков
             pattern = Pattern.compile("\\d{11}", Pattern.DOTALL);
             matcher = pattern.matcher(personalData);
             if (matcher.find()) {
@@ -95,30 +104,34 @@ public class l2_hard {
             return personalData.substring(0, 4) + "***" + personalData.substring(8, personalData.length());
         } else if (typeOfPersonalData == TypeOfPersonalData.NAME) {
             String[] nameArray = personalData.split(" ");
-
             String[] returnArrayName = new String[nameArray.length];
 
+            //Первое слово - всегда фамилия. Скрываю все символы, кроме первого и последнего
             for (int i = 0; i < nameArray.length; i++) {
                 switch (i) {
                     case 0: {
+                        //Фамилия
                         String lastName = nameArray[i].charAt(0) + "*".repeat(nameArray[i].length() - 2) + nameArray[i].substring(nameArray[i].length() - 1, nameArray[0].length());
                         returnArrayName[i] = lastName;
                         break;
                     }
                     case 1: {
-                        String firstName = nameArray[i];
-                        returnArrayName[i] = firstName;
+                        //Имя
+                        returnArrayName[i] = nameArray[i];
                         break;
                     }
                     default: {
+                        //Условных отчеств может быть много.
                         returnArrayName[i] = nameArray[i].charAt(0) + ".";
                         break;
                     }
                 }
             }
             StringBuilder sb = new StringBuilder();
+
             for (int i = 0; i < returnArrayName.length; i++) {
                 sb.append(returnArrayName[i]);
+
                 if (i != returnArrayName.length - 1) {
                     sb.append(" ");
                 }
