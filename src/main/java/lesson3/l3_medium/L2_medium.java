@@ -134,22 +134,28 @@ public class L2_medium {
         System.out.println();
         System.out.println("Задание №4");
 
-        Warehouse warehouse = new Warehouse("Скалад1", 100);
-        System.out.println(warehouse.toString());
+        Warehouse warehouse1 = new Warehouse("Скалад на опушке леса", 100);
+        Staff worker1 = new Staff("Иванов");
+        Staff worker2 = new Staff("Петров");
+        Staff worker3 = new Staff("Сидоров");
 
-        Staff worker1 = new Staff("Name1");
-        Staff worker2 = new Staff("Name2");
-        Staff worker3 = new Staff("Name3");
+        System.out.println(warehouse1.toString());
 
-        worker1.setDropBottle();
-        worker1.setDropBottle();
-        worker1.setDropBottle();
-        worker1.setDropBottle();
+        changeBottle(warehouse1, worker1);
+        changeBottle(warehouse1, worker1);
+        changeBottle(warehouse1, worker1);
+        changeBottle(warehouse1, worker1);
+        changeBottle(warehouse1, worker2);
+        changeBottle(warehouse1, worker2);
+        changeBottle(warehouse1, worker3);
 
-        worker2.setDropBottle();
-        worker3.setDropBottle();
-
-        System.out.println(warehouse.toString());
+        System.out.println(warehouse1.toString());
         System.out.println(worker1.toString());
+    }
+
+    private static void changeBottle(Warehouse warehouse, Staff worker) {
+        worker.setDropBottle();
+        warehouse.setDropedBottles();
+        System.out.println("Ура, я испортил водку! Склад: " +warehouse.getName() + ". Сотрудник: " + worker.getName() );
     }
 }

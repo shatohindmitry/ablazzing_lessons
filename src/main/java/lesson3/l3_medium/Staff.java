@@ -20,7 +20,6 @@ public class Staff {
 
     public void setDropBottle() {
         this.dropBottle = this.dropBottle + 1;
-        Warehouse.setDropedBottles();
     }
 
     public String getName() {

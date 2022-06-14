@@ -1,7 +1,7 @@
 package lesson3.l3_medium;
 
 public class Warehouse {
-    static private int countBottles;
+    private int countBottles;
     private String name;
 
     public Warehouse(String name, int countBottles) {
@@ -9,15 +9,15 @@ public class Warehouse {
         this.countBottles = countBottles;
     }
 
-    private static int getCountBottles() {
-        return countBottles;
+    public int getCountBottles() {
+        return this.countBottles;
     }
 
-    public static void setDropedBottles() {
-        countBottles = countBottles - 1;
+    public void setDropedBottles() {
+        this.countBottles = this.countBottles - 1;
     }
 
-    private String getName() {
+    public String getName() {
         return name;
     }
 
