@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class GeneratorExpertHomework {
+    //private static final String LETTERS = "МАВ";
     private static final String LETTERS = "НМКУЕНХВАРОСМТ";
     private static final Random RANDOM = new Random(1);
     private static final int countRegions = 100;
