@@ -19,10 +19,8 @@ public class L2_medium {
         double result = 0;
         double resultMax = 1_000_000;
         long iterCount = 0;
-        while (true) {
-            if (increment < 0) {
-                break;
-            } else if (result >= resultMax) {
+        while (increment > 0) {
+            if (result >= resultMax) {
                 System.out.println("Количество итераций: " + iterCount);
                 break;
             }
