@@ -8,7 +8,7 @@ public class L2_Easy {
         //Примечание: последний пробел не контролируется
         //Буква "а" - по хардкоду
         int intMax = 100;
-        for (int i= 1; i<=intMax; i++) {
+        for (int i = 1; i <= intMax; i++) {
             System.out.print(i + "a ");
         }
 
@@ -25,13 +25,13 @@ public class L2_Easy {
         //Примечание: Не проверки, что лет в осмысленном интервале.
         //Не проверки корректности входящих данных
         //Вывод хардкод
-        if(ageChildren<=5){
+        if (ageChildren <= 5) {
             System.out.println("Пошел в сад");
-        }else if (ageChildren<=10){
+        } else if (ageChildren <= 10) {
             System.out.println("Пошел в младшую школу");
-        }else if (ageChildren<=16){
+        } else if (ageChildren <= 16) {
             System.out.println("Пошел в среднюю школу");
-        }else{
+        } else {
             System.out.println("Пошел в университет");
         }
 
@@ -52,15 +52,15 @@ public class L2_Easy {
         // Ожидаемый результат: вывод на экран сделанного салата или объявление о том, что ничего нет.
         // Проверьте работоспособность условий, через изменение значения переменных.
 
-        if (chicken & vegetables & sour & toast){
+        if (chicken && vegetables && sour && toast) {
             System.out.println("Цезарь");
-        }else if (vegetables & (sausage | chicken) & eggs ){
+        } else if (vegetables && (sausage || chicken) && eggs) {
             System.out.println("Оливье");
-        }else if(vegetables){
+        } else if (vegetables) {
             System.out.println("Овощной");
-        }else if(chicken | vegetables | sour | toast | sausage | eggs){
+        } else if (chicken || vegetables || sour || toast || sausage | eggs) {
             System.out.println("Есть некоторые продукты. Нет рецепта");
-        }else {
+        } else {
             System.out.println("У меня ничего нет");
         }
 
