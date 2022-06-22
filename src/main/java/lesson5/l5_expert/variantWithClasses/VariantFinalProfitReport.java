@@ -27,12 +27,12 @@ public class VariantFinalProfitReport {
     }
 
     private static void printReport(List<Row> collectData) {
-        List<Row> collectOnlyOneShop = null;
-        Set shops = collectData.stream()
+        List<Row> collectOnlyOneShop;
+        Set<String> shops = collectData.stream()
                 .map(element -> element.shop)
                 .collect(Collectors.toSet());
 
-        for (Object shop : shops) {
+        for (String shop : shops) {
             StringBuilder stringForReport = new StringBuilder("Расходы ");
             collectOnlyOneShop = collectData.stream()
                     .filter((record) -> (record.shop.equals(shop)))
@@ -54,17 +54,17 @@ public class VariantFinalProfitReport {
     }
 
     private static void printReport(String shop, List<Row> collectData) {
-        List<Row> collectOnlyOneMonth = null;
+        List<Row> collectOnlyOneMonth;
         System.out.println(REPORT_HEADER);
-        Set months = collectData.stream()
+        Set<Integer> months = collectData.stream()
                 .filter(record -> record.shop.equals(SHOP))
                 .map(element -> element.month)
                 .collect(Collectors.toSet());
 
-        for (Object month : months) {
+        for (int month : months) {
             StringBuilder stringForReport = new StringBuilder("");
             collectOnlyOneMonth = collectData.stream()
-                    .filter((record) -> (record.shop.equals(SHOP) && record.month == (int) month))
+                    .filter((record) -> (record.shop.equals(SHOP) && record.month == month))
                     .collect(Collectors.toList());
 
             if (!collectData.isEmpty()) {
@@ -97,8 +97,7 @@ public class VariantFinalProfitReport {
             incomes = Double.parseDouble(dataString[1]);
             outcomes = Double.parseDouble(dataString[2]);
             String monthString = new DecimalFormat("00").format(Integer.parseInt(dateArr[1]));
-            String monthAndYaer = monthString + "." + dateArr[2];
-            date = monthAndYaer;
+            date = monthString + "." + dateArr[2];
             Row record = new Row(month, incomes, outcomes, shop, date);
             report.add(record);
         }
@@ -120,7 +119,7 @@ public class VariantFinalProfitReport {
 //        11.2012:-34525,80
 //        12.2012:-107203,39
 //
-//        Расходы ydoma за весь период:4635784,95
-//        Расходы perekrestok за весь период:4447015,21
-//        Расходы okey за весь период:4304725,94
-//        Расходы pyterochka за весь период:4564607,59
+//        Расходы ydoma за весь период: 4635784,95
+//        Расходы perekrestok за весь период: 4447015,21
+//        Расходы okey за весь период: 4304725,94
+//        Расходы pyterochka за весь период: 4564607,59
