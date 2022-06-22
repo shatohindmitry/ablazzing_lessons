@@ -21,7 +21,7 @@ public class Homework3 {
         try {
             createReports(financialRecord);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -36,7 +36,7 @@ public class Homework3 {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePath, true))) {
             bufferedWriter.write(String.join("",financialRecord.toString(), "\n"));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }
