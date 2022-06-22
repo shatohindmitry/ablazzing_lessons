@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class VariantFinalProfitReport {
-    private static Path resource = Paths.get("resource");
+    private static final Path resource = Paths.get("resource");
     private static final String REPORT_HEADER_CUT = "магазин;доход;расход;дата";
     private static final String SHOP = "pyterochka";
     private static final String REPORT_HEADER = "Прибыль по магазину " + SHOP + " по месяцам";
@@ -21,8 +21,8 @@ public class VariantFinalProfitReport {
     public static void main(String[] args) throws IOException {
 
         Utils utils = new Utils(REPORT_HEADER_CUT, resource);
-        List filesPaths = utils.getFilesPath();
-        List dataFromFiles = utils.getDataFromFiles(filesPaths);
+        List<Path> filesPaths = utils.getFilesPath();
+        List<String> dataFromFiles = utils.getDataFromFiles(filesPaths);
         List<Row> collectData = collectData(dataFromFiles);
         printReport(SHOP, collectData);
         System.out.println();
@@ -32,19 +32,19 @@ public class VariantFinalProfitReport {
     private static void printReport(List<Row> collectData) {
         List<Row> collectOnlyOneShop;
         Set<String> shops = collectData.stream()
-                .map(element -> element.shop)
+                .map(Row::getShop)
                 .collect(Collectors.toSet());
 
         for (String shop : shops) {
             StringBuilder stringForReport = new StringBuilder("Расходы ");
             collectOnlyOneShop = collectData.stream()
-                    .filter((record) -> (record.shop.equals(shop)))
+                    .filter((record) -> (record.getShop().equals(shop)))
                     .collect(Collectors.toList());
 
             if (!collectData.isEmpty()) {
                 double expenses = 0;
                 Row oneRecord = collectOnlyOneShop.get(0);
-                stringForReport.append(oneRecord.shop);
+                stringForReport.append(oneRecord.getShop());
                 stringForReport.append(" за весь период: ");
 
                 for (Row record : collectOnlyOneShop) {
@@ -60,20 +60,20 @@ public class VariantFinalProfitReport {
         List<Row> collectOnlyOneMonth;
         System.out.println(REPORT_HEADER);
         Set<Integer> months = collectData.stream()
-                .filter(record -> record.shop.equals(SHOP))
-                .map(element -> element.month)
+                .filter(record -> record.getShop().equals(shop))
+                .map(Row::getMonth)
                 .collect(Collectors.toSet());
 
         for (int month : months) {
             StringBuilder stringForReport = new StringBuilder("");
             collectOnlyOneMonth = collectData.stream()
-                    .filter((record) -> (record.shop.equals(SHOP) && record.month == month))
+                    .filter((record) -> (record.getShop().equals(shop) && record.getMonth() == month))
                     .collect(Collectors.toList());
 
             if (!collectData.isEmpty()) {
                 double margin = 0;
                 Row oneRecord = collectOnlyOneMonth.get(0);
-                stringForReport.append(oneRecord.date);
+                stringForReport.append(oneRecord.getDate());
                 stringForReport.append(": ");
 
                 for (Row record : collectOnlyOneMonth) {
@@ -88,18 +88,17 @@ public class VariantFinalProfitReport {
     private static DecimalFormat getDecimalFormat() {
         DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
         decimalFormatSymbols.setDecimalSeparator(SEPARATOR);
-        DecimalFormat decimalFormat = new DecimalFormat(DECIMAL_PATTERN, decimalFormatSymbols);
-        return decimalFormat;
+        return new DecimalFormat(DECIMAL_PATTERN, decimalFormatSymbols);
     }
 
-    private static List<Row> collectData(List dataFromFiles) {
+    private static List<Row> collectData(List<String> dataFromFiles) {
         List<Row> report = new ArrayList<>();
         int month;
         double incomes, outcomes;
         String shop, date;
         String[] dateArr;
 
-        for (Object row : dataFromFiles) {
+        for (String row : dataFromFiles) {
             String[] dataString = row.toString().split(";");
             shop = dataString[0];
             dateArr = dataString[3].split("/");
