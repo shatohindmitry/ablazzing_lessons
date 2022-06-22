@@ -3,15 +3,20 @@ package lesson5.l5_expert.variantWithClasses;
 public class Row {
     private int month;
     private double incomes, outcomes;
-    private String shop;
-    private String date;
+    private String shop, date;
+    private int day;
 
-    public Row(int month, double incomes, double outcomes, String shop, String date) {
+    public Row(int month, double incomes, double outcomes, String shop, String date, int day) {
         this.month = month;
         this.incomes = incomes;
         this.outcomes = outcomes;
         this.shop = shop;
         this.date = date;
+        this.day = day;
+    }
+
+    public int getDay() {
+        return day;
     }
 
     public int getMonth() {

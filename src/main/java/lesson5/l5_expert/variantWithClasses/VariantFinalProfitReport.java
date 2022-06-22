@@ -17,6 +17,7 @@ public class VariantFinalProfitReport {
     private static final String REPORT_HEADER = "Прибыль по магазину " + SHOP + " по месяцам";
     private static final char SEPARATOR = '.';
     private static final String DECIMAL_PATTERN = "0.00";
+    private static final boolean WEEK = true;
 
     public static void main(String[] args) throws IOException {
 
@@ -24,16 +25,98 @@ public class VariantFinalProfitReport {
         List<Path> filesPaths = utils.getFilesPath();
         List<String> dataFromFiles = utils.getDataFromFiles(filesPaths);
         List<Row> collectData = collectData(dataFromFiles);
+        System.out.println("\nОтчет только для " + SHOP);
         printReport(SHOP, collectData);
-        System.out.println();
+        System.out.println("\nОтчет по всем магазинам");
         printReport(collectData);
+        System.out.println("\nОтчет по всем магазинам с разбивкой по неделям");
+        printReport(collectData, WEEK);
     }
 
-    private static void printReport(List<Row> collectData) {
-        List<Row> collectOnlyOneShop;
-        Set<String> shops = collectData.stream()
+    private static Set<String> getShops(List<Row> collectData) {
+        return collectData.stream()
                 .map(Row::getShop)
                 .collect(Collectors.toSet());
+    }
+
+    //Вывод сальдо по магазинам по годам по неделям
+    private static void printReport(List<Row> collectData, boolean week) {
+        List<Row> collectOnlyOneShop;
+        Set<String> shops = getShops(collectData);
+        List<Row> collectOnlyOneMonth;
+        for (String shop : shops) {
+            System.out.println("\n" + shop);
+            collectOnlyOneShop = collectData.stream()
+                    .filter((record) -> (record.getShop().equals(shop)))
+                    .collect(Collectors.toList());
+
+            Set<Integer> months = getMonths(collectOnlyOneShop, shop);
+
+            for (int month : months) {
+                collectOnlyOneMonth = collectData.stream()
+                        .filter((record) -> (record.getShop().equals(shop) && record.getMonth() == month))
+                        .collect(Collectors.toList());
+                System.out.println(collectOnlyOneMonth.get(0).getDate());
+                for (int weekNumber = 1; weekNumber < 5; weekNumber++) {
+                    StringBuilder stringForReport = printWeek(weekNumber, collectOnlyOneMonth);
+                    System.out.println(stringForReport.toString());
+                }
+            }
+        }
+    }
+
+    private static Set<Integer> getMonths(List<Row> collectData, String shop) {
+        return collectData.stream()
+                .filter(record -> record.getShop().equals(shop))
+                .map(Row::getMonth)
+                .collect(Collectors.toSet());
+    }
+
+    private static StringBuilder printWeek(int weekNumber, List<Row> collectOnlyOneShop) {
+        StringBuilder stringForReport = new StringBuilder("Сальдо ");
+        double margin = 0;
+        int minDay = 0, maxDay = 0;
+        String weekName = "";
+        switch (weekNumber) {
+            case 1:
+                minDay = 1;
+                maxDay = 7;
+                weekName = "первую";
+                break;
+            case 2:
+                minDay = 7;
+                maxDay = 14;
+                weekName = "вторую";
+                break;
+            case 3:
+                minDay = 14;
+                maxDay = 21;
+                weekName = "третью";
+                break;
+            case 4:
+                minDay = 21;
+                maxDay = 31;
+                weekName = "четвертую";
+                break;
+        }
+
+        stringForReport.append(" за " + weekName + " неделю: ");
+        int finalMaxDay = maxDay;
+        int finalMinDay = minDay;
+        List<Row> dataWeek = collectOnlyOneShop.stream()
+                .filter(f -> f.getDay() >= finalMinDay && f.getDay() <= finalMaxDay)
+                .collect(Collectors.toList());
+        for (Row record : dataWeek) {
+            margin = margin + record.getMargin();
+        }
+        stringForReport.append(getDecimalFormat().format(margin));
+        return stringForReport;
+    }
+
+    //Вывод расходов по всем магазинам
+    private static void printReport(List<Row> collectData) {
+        List<Row> collectOnlyOneShop;
+        Set<String> shops = getShops(collectData);
 
         for (String shop : shops) {
             StringBuilder stringForReport = new StringBuilder("Расходы ");
@@ -56,14 +139,11 @@ public class VariantFinalProfitReport {
         }
     }
 
+    //Вывод сальдо по годам
     private static void printReport(String shop, List<Row> collectData) {
         List<Row> collectOnlyOneMonth;
         System.out.println(REPORT_HEADER);
-        Set<Integer> months = collectData.stream()
-                .filter(record -> record.getShop().equals(shop))
-                .map(Row::getMonth)
-                .collect(Collectors.toSet());
-
+        Set<Integer> months = getMonths(collectData, shop);
         for (int month : months) {
             StringBuilder stringForReport = new StringBuilder("");
             collectOnlyOneMonth = collectData.stream()
@@ -93,7 +173,7 @@ public class VariantFinalProfitReport {
 
     private static List<Row> collectData(List<String> dataFromFiles) {
         List<Row> report = new ArrayList<>();
-        int month;
+        int month, day;
         double incomes, outcomes;
         String shop, date;
         String[] dateArr;
@@ -107,7 +187,8 @@ public class VariantFinalProfitReport {
             outcomes = Double.parseDouble(dataString[2]);
             String monthString = new DecimalFormat("00").format(Integer.parseInt(dateArr[1]));
             date = monthString + "." + dateArr[2];
-            Row record = new Row(month, incomes, outcomes, shop, date);
+            day = Integer.parseInt(dateArr[0]);
+            Row record = new Row(month, incomes, outcomes, shop, date, day);
             report.add(record);
         }
         return report;
