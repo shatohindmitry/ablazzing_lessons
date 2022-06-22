@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +15,8 @@ public class VariantFinalProfitReport {
     private static final String REPORT_HEADER_CUT = "магазин;доход;расход;дата";
     private static final String SHOP = "pyterochka";
     private static final String REPORT_HEADER = "Прибыль по магазину " + SHOP + " по месяцам";
+    private static final char SEPARATOR = '.';
+    private static final String DECIMAL_PATTERN = "0.00";
 
     public static void main(String[] args) throws IOException {
 
@@ -47,7 +50,7 @@ public class VariantFinalProfitReport {
                 for (Row record : collectOnlyOneShop) {
                     expenses = expenses + record.getOutcomes();
                 }
-                stringForReport.append(String.format("%.2f", expenses));
+                stringForReport.append(getDecimalFormat().format(expenses));
             }
             System.out.println(stringForReport.toString());
         }
@@ -76,10 +79,17 @@ public class VariantFinalProfitReport {
                 for (Row record : collectOnlyOneMonth) {
                     margin = margin + record.getMargin();
                 }
-                stringForReport.append(String.format("%.2f", margin));
+                stringForReport.append(getDecimalFormat().format(margin));
             }
             System.out.println(stringForReport.toString());
         }
+    }
+
+    private static DecimalFormat getDecimalFormat() {
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+        decimalFormatSymbols.setDecimalSeparator(SEPARATOR);
+        DecimalFormat decimalFormat = new DecimalFormat(DECIMAL_PATTERN, decimalFormatSymbols);
+        return decimalFormat;
     }
 
     private static List<Row> collectData(List dataFromFiles) {
@@ -106,20 +116,20 @@ public class VariantFinalProfitReport {
 }
 
 //    Прибыль по магазину pyterochka по месяцам
-//        01.2012:-34075,20
-//        02.2012:-101400,01
-//        03.2012:-196646,11
-//        04.2012:166021,31
-//        05.2012:97219,82
-//        06.2012:43280,02
-//        07.2012:-84599,53
-//        08.2012:89920,32
-//        09.2012:16178,95
-//        10.2012:101142,46
-//        11.2012:-34525,80
-//        12.2012:-107203,39
+//        01.2012: -34075.20
+//        02.2012: -101400.01
+//        03.2012: -196646.11
+//        04.2012: 166021.31
+//        05.2012: 97219.82
+//        06.2012: 43280.02
+//        07.2012: -84599.53
+//        08.2012: 89920.32
+//        09.2012: 16178.95
+//        10.2012: 101142.46
+//        11.2012: -34525.80
+//        12.2012: -107203.39
 //
-//        Расходы ydoma за весь период: 4635784,95
-//        Расходы perekrestok за весь период: 4447015,21
-//        Расходы okey за весь период: 4304725,94
-//        Расходы pyterochka за весь период: 4564607,59
+//        Расходы ydoma за весь период: 4635784.95
+//        Расходы perekrestok за весь период: 4447015.21
+//        Расходы okey за весь период: 4304725.94
+//        Расходы pyterochka за весь период: 4564607.59
