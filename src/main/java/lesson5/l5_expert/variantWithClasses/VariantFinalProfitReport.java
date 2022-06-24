@@ -22,15 +22,13 @@ public class VariantFinalProfitReport {
     public static void main(String[] args) throws IOException {
 
         Utils utils = new Utils(REPORT_HEADER_CUT, resource);
-        List<Path> filesPaths = utils.getFilesPath();
-        List<String> dataFromFiles = utils.getDataFromFiles(filesPaths);
-        List<Row> collectData = collectData(dataFromFiles);
+        List<Row> collectData = collectData(utils.getDataFromFiles());
         System.out.println("\nОтчет только для " + SHOP);
-        printReport(SHOP, collectData);
+        printReportProfitByMonthAndShop(SHOP, collectData);
         System.out.println("\nОтчет по всем магазинам");
-        printReport(collectData);
+        printReportOutcomesAllPeriod(collectData);
         System.out.println("\nОтчет по всем магазинам с разбивкой по неделям");
-        printReport(collectData, WEEK);
+        printReportAllPeriodByWeek(collectData, WEEK);
     }
 
     private static Set<String> getShops(List<Row> collectData) {
@@ -40,7 +38,7 @@ public class VariantFinalProfitReport {
     }
 
     //Вывод сальдо по магазинам по годам по неделям
-    private static void printReport(List<Row> collectData, boolean week) {
+    private static void printReportAllPeriodByWeek(List<Row> collectData, boolean week) {
         List<Row> collectOnlyOneShop;
         Set<String> shops = getShops(collectData);
         List<Row> collectOnlyOneMonth;
@@ -114,7 +112,7 @@ public class VariantFinalProfitReport {
     }
 
     //Вывод расходов по всем магазинам
-    private static void printReport(List<Row> collectData) {
+    private static void printReportOutcomesAllPeriod(List<Row> collectData) {
         List<Row> collectOnlyOneShop;
         Set<String> shops = getShops(collectData);
 
@@ -140,7 +138,7 @@ public class VariantFinalProfitReport {
     }
 
     //Вывод сальдо по годам
-    private static void printReport(String shop, List<Row> collectData) {
+    private static void printReportProfitByMonthAndShop(String shop, List<Row> collectData) {
         List<Row> collectOnlyOneMonth;
         System.out.println(REPORT_HEADER);
         Set<Integer> months = getMonths(collectData, shop);

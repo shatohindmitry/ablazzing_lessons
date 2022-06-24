@@ -27,7 +27,8 @@ public class Utils {
                 .collect(Collectors.toList());
     }
 
-    public List<String> getDataFromFiles(List<Path> filesPaths) {
+    public List<String> getDataFromFiles() throws IOException {
+        List<Path> filesPaths = getFilesPath();
         List<String> dataFromFiles = new ArrayList();
         for (Path filePath : filesPaths) {
             try {
