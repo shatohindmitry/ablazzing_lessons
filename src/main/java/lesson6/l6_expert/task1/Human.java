@@ -8,19 +8,15 @@ public class Human {
     public Human() {
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setAge(int age) {
+    private void setAge(int age) {
         this.age = age;
     }
 
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
 
-    public void setWeight(double weight) {
+    private void setWeight(double weight) {
         this.weight = weight;
     }
 
