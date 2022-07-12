@@ -1,6 +1,6 @@
 package lesson6.l6_expert.task2;
 
-public class CarShop {
+public class CarShop extends Car{
     Car car;
 
     public CarShop() {
@@ -14,9 +14,8 @@ public class CarShop {
 
     public String toSell() {
         try {
-            double price = car.getPrice();
             return "Здравствуй клиент, цена этого авто \n" +
-                    price + "\n" +
+                    car.getPrice() + "\n" +
                     "Хочешь купить авто?";
         } catch (CarPriceException e) {
             return "Здравствуй клиент, цена этого авто \n" +

@@ -31,7 +31,7 @@ public class Human {
     static class HumanBuilder {
         private Human human;
 
-        public HumanBuilder() {
+        private HumanBuilder() {
             this.human = new Human();
         }
 
