@@ -37,10 +37,10 @@ public class Main {
                         .limit(e)
                         .map(f -> random.nextInt(10))
                         .collect(Collectors.toList())))
-                .map(e -> e.getIntegers())
-                .flatMap(e -> e.stream())
+                .map(User::getIntegers)
+                .flatMap(Collection::stream)
                 .map(e -> e * 10)
-                .reduce(0, (e, k) -> e + k);
+                .reduce(0, Integer::sum);
         System.out.println(result); //1120
 
         //Задача №2
@@ -50,7 +50,7 @@ public class Main {
 
         List<List<Integer>> lists = List.of(List.of(1, 2), List.of(3, 4, 5), List.of());
 
-        List<String> collect = lists.stream()
+        List<Integer> collect = lists.stream()
                 .sorted((o1, o2) -> {
                     if (o1.size() > o2.size())
                         return o2.size() - o1.size();
@@ -58,7 +58,6 @@ public class Main {
                         return 0;
                 })
                 .flatMap(Collection::stream)
-                .map(e -> Integer.toString(e))
                 .collect(Collectors.toList());
         System.out.println(collect);
 
@@ -68,7 +67,7 @@ public class Main {
         List<List<Integer>> lists2 = List.of(List.of(1, 2), List.of(3, 4, 5), List.of());
 
         boolean present = lists2.stream()
-                .anyMatch(e -> (e.stream().reduce(0, (f, k) -> f + k)) == 12);
+                .anyMatch(e -> (e.stream().reduce(0, Integer::sum)) == 12);
         System.out.println(present);
 
     }
