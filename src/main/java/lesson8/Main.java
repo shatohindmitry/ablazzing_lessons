@@ -33,9 +33,8 @@ public class Main {
 
         AtomicInteger atomicInteger = new AtomicInteger();
         Integer result = integers.stream().filter(e -> e > 4).distinct()
-                .map(e -> new User(e, Stream.generate(atomicInteger::incrementAndGet)
+                .map(e -> new User(e, Stream.generate(() -> random.nextInt(10))
                         .limit(e)
-                        .map(f -> random.nextInt(10))
                         .collect(Collectors.toList())))
                 .map(User::getIntegers)
                 .flatMap(Collection::stream)
